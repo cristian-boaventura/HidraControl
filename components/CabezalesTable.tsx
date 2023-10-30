@@ -21,6 +21,7 @@ import {
 import { useState } from 'react'
 import { StatusOnlineIcon } from '@heroicons/react/outline'
 import { ArchiveIcon, ExclamationIcon } from '@heroicons/react/solid'
+import Link from 'next/link'
 
 export type SalesPerson = {
   name: string
@@ -29,53 +30,59 @@ export type SalesPerson = {
   variance: string
   alert: string
   status: string
+  link: string
 }
 
 export const salesPeople: SalesPerson[] = [
   {
-    name: 'Peter Doe',
+    name: 'Cabezal 1',
     leads: 45,
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
     variance: 'low',
     alert: 'off',
     status: 'overperforming',
+    link: '/cabezal1',
   },
   {
-    name: 'Lena Whitehouse',
+    name: 'Cabezal 2',
     leads: 35,
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
     variance: 'low',
     alert: 'on',
     status: 'average',
+    link: '/cabezal2',
   },
   {
-    name: 'Phil Less',
+    name: 'Cabezal 3',
     leads: 52,
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
     variance: 'medium',
     alert: 'off',
     status: 'underperforming',
+    link: '/cabezal3',
   },
   {
-    name: 'John Camper',
+    name: 'Cabezal 4',
     leads: 22,
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
     variance: 'low',
     alert: 'off',
     status: 'overperforming',
+    link: '/cabezal4',
   },
   {
-    name: 'Max Balmoore',
+    name: 'Cabezal 5',
     leads: 49,
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
     variance: 'low',
     alert: 'off',
     status: 'overperforming',
+    link: '/cabezal5',
   },
 ]
 
@@ -132,7 +139,7 @@ export default function CabezalesTable() {
       <MultiSelect
         className="max-w-full sm:max-w-xs mt-5"
         onValueChange={setSelectedNames}
-        placeholder="Select Salespeople..."
+        placeholder="Seleccionar Cabezal..."
       >
         {salesPeople.map((item) => (
           <MultiSelectItem key={item.name} value={item.name}>
@@ -145,7 +152,7 @@ export default function CabezalesTable() {
         <Table className="mt-3">
           <TableHead>
             <TableRow>
-              <TableHeaderCell>Name</TableHeaderCell>
+              <TableHeaderCell>Cabezal</TableHeaderCell>
               <TableHeaderCell className="">Leads</TableHeaderCell>
               <TableHeaderCell className="">Description</TableHeaderCell>
               <TableHeaderCell className="">Variance</TableHeaderCell>
@@ -159,7 +166,9 @@ export default function CabezalesTable() {
               .filter((item) => isSalesPersonSelected(item))
               .map((item) => (
                 <TableRow key={item.name}>
-                  <TableCell>{item.name}</TableCell>
+                  <TableCell>
+                    <Link href={item.link}> {item.name}</Link>
+                  </TableCell>
                   <TableCell className="">
                     <Subtitle>{item.leads}</Subtitle>
                   </TableCell>
