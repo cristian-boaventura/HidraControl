@@ -11,7 +11,11 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url })
     }
     // redirect them to organization selection page
-    if (auth.userId && !auth.orgId && req.nextUrl.pathname !== '/dashboard') {
+    if (
+      auth.userId &&
+      !auth.orgId &&
+      !req.nextUrl.pathname.startsWith('/dashboard')
+    ) {
       const dashboard = new URL('/dashboard', req.url)
       return NextResponse.redirect(dashboard)
     }
