@@ -12,5 +12,5 @@ export const dynamicParams = false
 
 export default function Page({ params }: { params: { cabezal: string } }) {
   const { cabezal } = params
-  return <div className="text-4xl font-bold">{cabezal}</div>
+  return <div className="text-4xl font-bold m-5">{cabezal}</div>
 }

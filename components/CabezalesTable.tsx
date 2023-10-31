@@ -167,7 +167,7 @@ export default function CabezalesTable() {
               .map((item) => (
                 <TableRow key={item.name}>
                   <TableCell>
-                    <Link href={item.link}> {item.name}</Link>
+                    <Link href={`/dashboard${item.link}`}> {item.name}</Link>
                   </TableCell>
                   <TableCell className="">
                     <Subtitle>{item.leads}</Subtitle>
