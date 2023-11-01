@@ -18,12 +18,14 @@ import {
   Badge,
   Legend,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StatusOnlineIcon } from '@heroicons/react/outline'
 import { ArchiveIcon, ExclamationIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
+import { useAuth } from '@clerk/nextjs'
+import { supabaseClient } from '@/lib/db'
 
-export type SalesPerson = {
+export type Cabezal = {
   name: string
   leads: number
   description: string
@@ -33,64 +35,27 @@ export type SalesPerson = {
   link: string
 }
 
-export const salesPeople: SalesPerson[] = [
-  {
-    name: 'Cabezal 1',
-    leads: 45,
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
-    variance: 'low',
-    alert: 'off',
-    status: 'overperforming',
-    link: '/cabezal1',
-  },
-  {
-    name: 'Cabezal 2',
-    leads: 35,
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
-    variance: 'low',
-    alert: 'on',
-    status: 'average',
-    link: '/cabezal2',
-  },
-  {
-    name: 'Cabezal 3',
-    leads: 52,
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
-    variance: 'medium',
-    alert: 'off',
-    status: 'underperforming',
-    link: '/cabezal3',
-  },
-  {
-    name: 'Cabezal 4',
-    leads: 22,
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
-    variance: 'low',
-    alert: 'off',
-    status: 'overperforming',
-    link: '/cabezal4',
-  },
-  {
-    name: 'Cabezal 5',
-    leads: 49,
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque!',
-    variance: 'low',
-    alert: 'off',
-    status: 'overperforming',
-    link: '/cabezal5',
-  },
-]
-
 export default function CabezalesTable() {
+  const { getToken } = useAuth()
   const [selectedNames, setSelectedNames] = useState<string[]>([])
+  const [cabezales, setCabezales] = useState<Cabezal[]>([])
 
-  const isSalesPersonSelected = (salesPerson: SalesPerson) =>
-    selectedNames.includes(salesPerson.name) || selectedNames.length === 0
+  useEffect(() => {
+    async function getCabezales() {
+      const supabaseAccessToken = (await getToken({
+        template: 'supabase',
+      })) as string
+      const supabase = await supabaseClient(supabaseAccessToken)
+      const { data } = await supabase.from('cabezales').select()
+      if (data) {
+        setCabezales(data)
+      }
+    }
+    getCabezales()
+  }, [])
+
+  const isCabezalSelected = (cabezal: Cabezal) =>
+    selectedNames.includes(cabezal.name) || selectedNames.length === 0
 
   const selectVariance = (variance: string) => {
     if (variance === 'low') {
@@ -141,7 +106,7 @@ export default function CabezalesTable() {
         onValueChange={setSelectedNames}
         placeholder="Seleccionar Cabezal..."
       >
-        {salesPeople.map((item) => (
+        {cabezales.map((item) => (
           <MultiSelectItem key={item.name} value={item.name}>
             {item.name}
           </MultiSelectItem>
@@ -162,8 +127,8 @@ export default function CabezalesTable() {
           </TableHead>
 
           <TableBody>
-            {salesPeople
-              .filter((item) => isSalesPersonSelected(item))
+            {cabezales
+              .filter((item) => isCabezalSelected(item))
               .map((item) => (
                 <TableRow key={item.name}>
                   <TableCell>
