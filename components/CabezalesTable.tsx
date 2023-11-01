@@ -52,7 +52,7 @@ export default function CabezalesTable() {
       }
     }
     getCabezales()
-  })
+  }, [getToken])
 
   const isCabezalSelected = (cabezal: Cabezal) =>
     selectedNames.includes(cabezal.name) || selectedNames.length === 0
